@@ -1,0 +1,153 @@
+:root {
+  --fb-navy: #002d72;
+  --fb-navy-dark: #00173d;
+  --fb-navy-light: #0d419d;
+  --fb-yellow: #ffd100;
+  --fb-yellow-hover: #e6bc00;
+  --fb-yellow-light: #fff8db;
+  --fb-gold: #f5ba13;
+  --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: #f3f6fa;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fenerbahce Custom Gradient & Headers */
+.bg-fb-navy {
+  background-color: var(--fb-navy) !important;
+}
+
+.bg-fb-gradient {
+  background: linear-gradient(135deg, #001a44 0%, #002d72 50%, #0d419d 100%) !important;
+}
+
+.text-fb-yellow {
+  color: var(--fb-yellow) !important;
+}
+
+.bg-fb-yellow {
+  background-color: var(--fb-yellow) !important;
+  color: #001a44 !important;
+}
+
+.btn-fb-yellow {
+  background-color: var(--fb-yellow);
+  color: #001a44;
+  font-weight: 700;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-fb-yellow:hover {
+  background-color: var(--fb-yellow-hover);
+  color: #000;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 209, 0, 0.35);
+}
+
+.btn-fb-outline {
+  border: 2px solid var(--fb-yellow);
+  color: var(--fb-yellow);
+  font-weight: 600;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.btn-fb-outline:hover {
+  background: var(--fb-yellow);
+  color: #001a44;
+}
+
+/* Card Styles */
+.stat-card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 45, 114, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 45, 114, 0.12);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+}
+
+.stat-card.card-balance::before {
+  background: linear-gradient(to bottom, var(--fb-yellow), #f59e0b);
+}
+
+.stat-card.card-income::before {
+  background: linear-gradient(to bottom, #10b981, #059669);
+}
+
+.stat-card.card-expense::before {
+  background: linear-gradient(to bottom, #ef4444, #dc2626);
+}
+
+.transaction-card {
+  border: 1px solid rgba(0, 45, 114, 0.08);
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+  background: #ffffff;
+}
+
+.transaction-card:hover {
+  border-color: rgba(0, 45, 114, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 45, 114, 0.06);
+}
+
+.badge-income {
+  background-color: #d1fae5;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.badge-expense {
+  background-color: #fee2e2;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.badge-fb {
+  background-color: #e0e7ff;
+  color: #002d72;
+  font-weight: 600;
+}
+
+/* Striped FB pattern decoration */
+.fb-stripes {
+  height: 4px;
+  width: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--fb-navy) 0,
+    var(--fb-navy) 30px,
+    var(--fb-yellow) 30px,
+    var(--fb-yellow) 60px
+  );
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
