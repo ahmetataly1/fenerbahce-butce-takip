@@ -13,22 +13,36 @@ export default function TransactionList({ transactions, onEdit, onDelete, onOpen
     return Array.from(new Set([...CATEGORIES.INCOME, ...CATEGORIES.EXPENSE]));
   }, []);
 
-  // Javascript filtreleme ve sıralama temelleri (filter, sort)
+  // Arama ve Kategoriye göre filtrelenmiş temel liste (Sekme sayıları buna göre dinamik hesaplanır)
+  const baseFilteredTransactions = useMemo(() => {
+    return transactions.filter((item) => {
+      // Kategori Filtresi
+      if (categoryFilter !== 'all' && item.category !== categoryFilter) return false;
+      // Arama Filtresi (başlık, açıklama veya kategoride ara)
+      if (searchTerm.trim() !== '') {
+        const term = searchTerm.toLowerCase();
+        const matchTitle = item.title?.toLowerCase().includes(term);
+        const matchDesc = item.description?.toLowerCase().includes(term);
+        const matchCat = item.category?.toLowerCase().includes(term);
+        if (!matchTitle && !matchDesc && !matchCat) return false;
+      }
+      return true;
+    });
+  }, [transactions, searchTerm, categoryFilter]);
+
+  // Kategori veya arama yapıldığında sekme butonlarındaki sayıların dinamik güncellenmesi
+  const tabCounts = useMemo(() => {
+    const all = baseFilteredTransactions.length;
+    const income = baseFilteredTransactions.filter((t) => t.type === 'income').length;
+    const expense = baseFilteredTransactions.filter((t) => t.type === 'expense').length;
+    return { all, income, expense };
+  }, [baseFilteredTransactions]);
+
+  // Tür filtresi ve sıralama uygulanmış nihai liste
   const filteredTransactions = useMemo(() => {
-    return transactions
+    return baseFilteredTransactions
       .filter((item) => {
-        // Tür Filtresi
         if (typeFilter !== 'all' && item.type !== typeFilter) return false;
-        // Kategori Filtresi
-        if (categoryFilter !== 'all' && item.category !== categoryFilter) return false;
-        // Arama Filtresi (başlık veya açıklamada ara)
-        if (searchTerm.trim() !== '') {
-          const term = searchTerm.toLowerCase();
-          const matchTitle = item.title?.toLowerCase().includes(term);
-          const matchDesc = item.description?.toLowerCase().includes(term);
-          const matchCat = item.category?.toLowerCase().includes(term);
-          if (!matchTitle && !matchDesc && !matchCat) return false;
-        }
         return true;
       })
       .sort((a, b) => {
@@ -38,7 +52,7 @@ export default function TransactionList({ transactions, onEdit, onDelete, onOpen
         if (sortBy === 'amount-asc') return Number(a.amount) - Number(b.amount);
         return 0;
       });
-  }, [transactions, searchTerm, typeFilter, categoryFilter, sortBy]);
+  }, [baseFilteredTransactions, typeFilter, sortBy]);
 
   return (
     <section className="bg-white rounded-4 p-4 shadow-sm border mb-5">
@@ -54,7 +68,7 @@ export default function TransactionList({ transactions, onEdit, onDelete, onOpen
           </p>
         </div>
 
-        {/* Tür Butonları (Tümü / Gelirler / Giderler) */}
+        {/* Tür Butonları (Tümü / Gelirler / Giderler) - Dinamik Filtre Sayıları */}
         <div className="btn-group rounded-pill p-1 bg-light border align-self-stretch align-self-lg-auto" role="group">
           <button
             type="button"
@@ -63,7 +77,7 @@ export default function TransactionList({ transactions, onEdit, onDelete, onOpen
             }`}
             onClick={() => setTypeFilter('all')}
           >
-            Tümü ({transactions.length})
+            Tümü ({tabCounts.all})
           </button>
           <button
             type="button"
@@ -72,7 +86,7 @@ export default function TransactionList({ transactions, onEdit, onDelete, onOpen
             }`}
             onClick={() => setTypeFilter('income')}
           >
-            Gelirler ({transactions.filter((t) => t.type === 'income').length})
+            Gelirler ({tabCounts.income})
           </button>
           <button
             type="button"
@@ -81,7 +95,7 @@ export default function TransactionList({ transactions, onEdit, onDelete, onOpen
             }`}
             onClick={() => setTypeFilter('expense')}
           >
-            Giderler ({transactions.filter((t) => t.type === 'expense').length})
+            Giderler ({tabCounts.expense})
           </button>
         </div>
       </div>
