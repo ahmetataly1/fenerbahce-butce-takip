@@ -103,7 +103,7 @@ git init
 git add .
 git commit -m "feat: Fenerbahce butce takibi React projesi tamamlandi"
 git branch -M main
-git remote add origin https://github.com/<kullanici-adiniz>/fenerbahce-butce-takip.git
+git remote add origin https://github.com/ahmetataly1/fenerbahce-butce-takip.git
 git push -u origin main
 ```
 
